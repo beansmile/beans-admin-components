@@ -16,6 +16,16 @@
 
     <ControlBox :title="$t('pageEditor.视频')" :visible="showController" @close="$emit('close')">
       <el-form @submit.native.prevent label-position="left" label-width="auto">
+        <el-form-item :label="$t('pageEditor.视频')">
+          <c-upload-form-item
+            :limit="1"
+            accept="video/*"
+            :size="1000"
+            type="video"
+            :value="$get(value, 'data[0].src')"
+            @change="handleSubmit"
+          />
+        </el-form-item>
         <el-form-item :label="$t('pageEditor.视频高度')">
           <el-input-number v-model="value.config.height" @change="syncChange" />
         </el-form-item>
@@ -48,13 +58,6 @@
           <el-switch v-model="value.config.muted" @change="syncChange" />
         </el-form-item>
       </el-form>
-      <c-upload
-        :limit="1"
-        accept="video/*"
-        :size="100"
-        :showCancelButton="false"
-        @submit="handleSubmit"
-      />
     </ControlBox>
   </div>
 </template>
@@ -123,8 +126,8 @@
       this.$emit('change', this.value);
     }
 
-    handleSubmit(data) {
-      this.$set(this.value.data[0], 'src', data[0]);
+    handleSubmit(src) {
+      this.$set(this.value.data[0], 'src', src);
       this.syncChange();
     }
   }

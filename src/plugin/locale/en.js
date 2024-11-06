@@ -264,6 +264,10 @@ export default {
       collapseContent: 'Content',
       collapseTitle: 'Title',
       collapseIndicator: 'Indicator icon'
+    },
+    upload: {
+      inputPasteTip: 'Click here and press Ctrl+V to paste and upload files',
+      pasteTip: 'Press Ctrl+V to paste and add files'
     }
   }
 }

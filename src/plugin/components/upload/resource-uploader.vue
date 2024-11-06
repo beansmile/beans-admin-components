@@ -14,6 +14,7 @@
         <Uploader
           v-bind="$attrs"
           :drag="drag"
+          :clipboard="clipboard"
           :limit="50"
           @success="handleUploadSuccess"
         />
@@ -90,6 +91,7 @@
     @Prop({ type: [Array, String], default: 'image' }) type;
     @Prop({ type: Number, default: 1 }) limit;
     @Prop(Boolean) drag;
+    @Prop(Boolean) clipboard;
 
     loading = false;
     data = [];

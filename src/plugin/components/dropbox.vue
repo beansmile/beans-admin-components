@@ -27,6 +27,7 @@
 
 <script>
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import { checkFileTypeByAccept } from '../utils';
 
 @Component
 export default class DropBox extends Vue {
@@ -35,22 +36,7 @@ export default class DropBox extends Vue {
   @Prop(Boolean) loading;
   @Prop({ type: Number, default: 0 }) size; // 单位M 0表示不限制
   @Prop({ type: Number, default: 1 }) limit;
-  
   active = false;
-
-  checkFileType(file, accept) {
-    if (!accept || accept === '*') {
-      return true;
-    }
-    const valid = accept.replace(/\s/g, '').split(',').filter(accept => {
-      if (accept.startsWith('.')) {
-        return (file.name || '').toLowerCase().endsWith(accept.toLowerCase());
-      }
-      return new RegExp(accept.replace('*', '.*')).test(file.type);
-    }).length > 0;
-    return valid;
-  }
-
 
   handleDropEnter() {
     this.active = true;
@@ -62,7 +48,7 @@ export default class DropBox extends Vue {
 
   validateFile(file, { validateType = true, validateSize = true } = {}) {
     if (validateType) {
-      const fileTypeValid = this.checkFileType(file, this.accept);
+      const fileTypeValid = checkFileTypeByAccept(file, this.accept);
       if (!fileTypeValid) {
         return `${file.name} - ${this.$t('bean.fileTypeisInvalid')}`;
       }

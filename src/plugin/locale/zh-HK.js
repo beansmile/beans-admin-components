@@ -264,6 +264,10 @@ export default {
       collapseContent: '折疊內容',
       collapseTitle: '折疊標題',
       collapseIndicator: '指示Icon'
+    },
+    upload: {
+      inputPasteTip: '點擊此處並按 Ctrl+V 粘貼文件上傳',
+      pasteTip: '按Ctrl+V 粘貼添加文件'
     }
   }
 }

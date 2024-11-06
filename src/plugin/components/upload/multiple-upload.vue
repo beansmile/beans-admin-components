@@ -61,6 +61,9 @@
       </el-row>
 
       <el-alert show-icon type="warning" :title="uploadHint" :closable="false"></el-alert>
+      <el-alert show-icon type="info" v-if="clipboard" :title="$t('bean.upload.pasteTip')" :closable="false" />
+
+      <br>
 
       <div class="box-table">
         <AdminTable
@@ -88,6 +91,7 @@ import _ from 'lodash';
 import ImageCropperAction from './image-cropper-action';
 import { screenService } from '../../services';
 import DropBox from '../dropbox.vue';
+import { handlePasteFiles } from '../../utils';
 
 @Component({
   components: {
@@ -106,6 +110,7 @@ export default class MultipleUploadDialog extends Vue {
   @Prop(String) hint; // 提示
   @Prop(Boolean) directory;
   @Prop(Boolean) drag;
+  @Prop(Boolean) clipboard;
 
   FILE_INPUT_REF_NAME = 'fileInput';
   DIRECTORY_INPUT_REF_NAME = 'fileDirectory';
@@ -293,6 +298,21 @@ export default class MultipleUploadDialog extends Vue {
 
   handleUploadDirectoryBtnClick() {
     this.$refs[this.DIRECTORY_INPUT_REF_NAME].click();
+  }
+
+  mounted() {
+    if (this.clipboard) {
+      this.$el.addEventListener('paste', this.handleUploadFromClipboard);
+    }
+  }
+
+  beforeDestroy() {
+    this.$el.removeEventListener('paste', this.handleUploadFromClipboard);
+  }
+
+  handleUploadFromClipboard = async (e) => {
+    const files = await handlePasteFiles(e, this.accept, this.size);
+    this.putValidFilesToTable(files);
   }
 
   async handleUpload(row, index) {

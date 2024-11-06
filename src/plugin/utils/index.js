@@ -8,3 +8,4 @@ export { decodeQuery, encodeQuery } from './query';
 export { contactUrl } from './contact-url'
 export { default as sleep } from './sleep';
 export * from './device';
+export * from './file';

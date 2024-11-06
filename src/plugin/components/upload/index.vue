@@ -27,27 +27,38 @@
         </small>
       </div>
     </DropBox>
-    <el-button
-      v-else
-      type="primary"
-      icon="el-icon-upload"
-      @click="handleUploadBtnClick"
-      :disabled="disabled"
-      :loading="loading"
-    >
-      {{ uploadButtonTextI18n }}
-      <template v-if="loading">
-        <template v-if="checksumPending">
-          {{ $t('bean.checksumPending') }}
+    <template v-else>
+      <el-button
+        type="primary"
+        icon="el-icon-upload"
+        @click="handleUploadBtnClick"
+        :disabled="disabled"
+        :loading="loading"
+      >
+        {{ uploadButtonTextI18n }}
+        <template v-if="loading">
+          <template v-if="checksumPending">
+            {{ $t('bean.checksumPending') }}
+          </template>
+          <template v-else>
+            ({{ uploadProgressPct }}%)
+          </template>
         </template>
-        <template v-else>
-          ({{ uploadProgressPct }}%)
-        </template>
-      </template>
-    </el-button>
+      </el-button>
+      <div class="paste-area" v-if="limit === 1 && clipboard">
+        <input
+          :disabled="disabled || loading"
+          :placeholder="$t('bean.upload.inputPasteTip')"
+          class="paste-input"
+          readonly
+          @paste.stop="handleUploadFromClipboard"
+        />
+      </div>
+    </template>
     <MultipleUpload
       v-if="renderMultipleUploadDialog && limit > 1"
       :drag="drag"
+      :clipboard="clipboard"
       v-model="showMultipleUploadDialog"
       v-bind="{ limit, cropper, accept, size, ...$attrs }"
       @success="$emit('success', $event)"
@@ -70,6 +81,7 @@ import MultipleUpload from './multiple-upload';
 import ImageCropper from './image-cropper';
 import { uploadFile, isImageFile, imageFileNeedCrop, checkFileSize, getImageInfo } from '../../utils';
 import DropBox from '../dropbox.vue';
+import { handlePasteFiles } from '../../utils';
 
 @Component({
   components: {
@@ -86,6 +98,7 @@ export default class AdminUpload extends Vue {
   @Prop({ type: Number, default: 3 }) size; // 单位M
   @Prop({ type: String }) uploadButtonText;
   @Prop(Boolean) drag;
+  @Prop(Boolean) clipboard;
 
   FILE_INPUT_REF_NAME = 'fileInput';
 
@@ -115,6 +128,16 @@ export default class AdminUpload extends Vue {
 
   handleUploadBtnClick() {
     this.triggerUpload();
+  }
+
+  async handleUploadFromClipboard (e) {
+    if (this.disabled || this.loading) {
+      return;
+    }
+    const files = await handlePasteFiles(e, this.accept, this.size);
+    if (files.length) {
+      this.handleUpload(files[0]);
+    }
   }
 
   async handleMultipleUploadDialogClosed() {

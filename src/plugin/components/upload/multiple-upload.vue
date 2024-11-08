@@ -1,6 +1,7 @@
 <template>
   <el-dialog
-    custom-class="dialog-admin-multiple-upload"
+    :custom-class="`dialog-admin-multiple-upload${drag ? ' height-full' : ''}`"
+    :top="drag ? 0 : undefined"
     width="70%"
     :visible="value"
     :title="$t('bean.actionUpload')"

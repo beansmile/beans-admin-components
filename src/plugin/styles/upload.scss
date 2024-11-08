@@ -1,4 +1,9 @@
 .dialog-admin-multiple-upload {
+  &.height-full {
+    height: 100vh;
+  }
+
+  &.height-full,
   &.is-fullscreen {
     display: flex;
     flex-direction: column;

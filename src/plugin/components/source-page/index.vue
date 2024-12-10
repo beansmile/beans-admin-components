@@ -126,6 +126,7 @@ export default class AdminSourcePage extends Vue {
   @Prop(Function) onFetchData;
   @Prop(Function) onDelete;
   @Prop(Function) afterDelete;
+  @Prop(Function) transformIndexQueryParams;
   @Prop({ type: Object, default: () => ({}) }) form;
   @Prop({ type: Object }) actionColumnProps;
   @Prop(Boolean) collapseFilter;
@@ -297,7 +298,8 @@ export default class AdminSourcePage extends Vue {
       }
 
       if (this.type === 'index') {
-        const { data, pagination } = await request.get(`/${this.namespace}${this.resource}`, { params: { ...this.$route.query } });
+        const params = this.transformIndexQueryParams ? this.transformIndexQueryParams({ ...this.$route.query }) : { ...this.$route.query };
+        const { data, pagination } = await request.get(`/${this.namespace}${this.resource}`, { params });
         this.$set(this.state, 'data', data);
         this.$set(this.state, 'pagination', pagination);
         return;

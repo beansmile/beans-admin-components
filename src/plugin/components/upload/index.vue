@@ -134,7 +134,15 @@ export default class AdminUpload extends Vue {
     if (this.disabled || this.loading) {
       return;
     }
-    const files = await handlePasteFiles(e, this.accept, this.size);
+    const files = await handlePasteFiles(e, this.accept, this.size, {
+      onInvalid: (type, file) => {
+        if (type === 'SIZE') {
+          this.$message.info(this.$t('bean.upload.fileSizeInvalid', { name: file.name }));
+        } else if (type === 'TYPE') {
+          this.$message.info(this.$t('bean.upload.fileTypeInvalid', { name: file.name }));
+        }
+      }
+    });
     if (files.length) {
       this.handleUpload(files[0]);
     }

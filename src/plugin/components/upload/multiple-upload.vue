@@ -11,7 +11,8 @@
     :close-on-press-escape="false"
     :show-close="false"
     @close="$emit('change', false)"
-    @closed="$emit('closed')"
+    @closed="handleDialogClosed"
+    @opened="handleDialogOpened"
   >
     <div class="admin-multiple-upload">
       <DropBox
@@ -296,18 +297,36 @@ export default class MultipleUploadDialog extends Vue {
     this.$refs[this.DIRECTORY_INPUT_REF_NAME].click();
   }
 
-  mounted() {
+  pasteEventAbortController = new AbortController();
+
+  handleDialogOpened() {
     if (this.clipboard) {
-      this.$el.addEventListener('paste', this.handleUploadFromClipboard);
+      this.pasteEventAbortController = new AbortController();
+      this.$el.addEventListener('paste', (e) => this.handleUploadFromClipboard(e), {
+        signal: this.pasteEventAbortController.signal
+      });
     }
   }
 
-  beforeDestroy() {
-    this.$el.removeEventListener('paste', this.handleUploadFromClipboard);
+  handleDialogClosed() {
+    this.$emit('closed');
+    this.pasteEventAbortController.abort();
   }
 
-  handleUploadFromClipboard = async (e) => {
-    const files = await handlePasteFiles(e, this.accept, this.size);
+  beforeDestroy() {
+    this.pasteEventAbortController.abort();
+  }
+
+  async handleUploadFromClipboard(e) {
+    const files = await handlePasteFiles(e, this.accept, this.size, {
+      onInvalid: (type, file) => {
+        if (type === 'SIZE') {
+          this.$message.info(this.$t('bean.upload.fileSizeInvalid', { name: file.name }));
+        } else if (type === 'TYPE') {
+          this.$message.info(this.$t('bean.upload.fileTypeInvalid', { name: file.name }));
+        }
+      }
+    });
     this.putValidFilesToTable(files);
   }
 

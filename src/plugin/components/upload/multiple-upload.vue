@@ -186,11 +186,6 @@ export default class MultipleUploadDialog extends Vue {
         }
       },
       {
-        prop: 'file.type',
-        width: 120,
-        label: this.$t('bean.fileType'),
-      },
-      {
         prop: 'result.url',
         width: 120,
         label: this.$t('bean.uploadSuccess'),

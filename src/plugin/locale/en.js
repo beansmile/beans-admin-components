@@ -267,7 +267,9 @@ export default {
     },
     upload: {
       inputPasteTip: 'Click here and press Ctrl+V to paste and upload files',
-      pasteTip: 'Press Ctrl+V to paste and add files'
+      pasteTip: 'Press Ctrl+V to paste and add files (if no response, please click any blank position in the pop-up window and paste again)',
+      fileSizeInvalid: 'File {name} size does not meet the requirements',
+      fileTypeInvalid: 'File {name} type does not meet the requirements'
     }
   }
 }

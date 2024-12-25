@@ -267,7 +267,9 @@ export default {
     },
     upload: {
       inputPasteTip: '點擊此處並按 Ctrl+V 粘貼文件上傳',
-      pasteTip: '按Ctrl+V 粘貼添加文件'
+      pasteTip: '按 Ctrl+V 粘貼添加文件 (如無反應，請點擊彈窗任意空白位置後再次粘貼)',
+      fileSizeInvalid: '文件 {name} 的大小不符合要求',
+      fileTypeInvalid: '文件 {name} 的格式不符合要求'
     }
   }
 }

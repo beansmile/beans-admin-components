@@ -1,6 +1,9 @@
 export default {
   componentPrefix: 'admin',
   globalConfigKey: 'adminConfig',
+  layout: {
+    routerViewFullPathKey: true, // 是否传$route.fullPath作为router-view的key，false时router-view的key为$route.path
+  },
   ckeditor: {
     editorConfig: new Function,
     contentsCss: [],

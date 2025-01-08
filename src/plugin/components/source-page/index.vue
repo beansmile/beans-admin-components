@@ -20,6 +20,7 @@
       :filterColumnSettingKey="filterColumnSettingKey"
       :index-exec-filter-router-type="indexExecFilterRouterType"
       ref="tablePage"
+      :fetching="fetching"
     >
       <template
         v-for="(slot, slotName) in $scopedSlots"
@@ -81,7 +82,7 @@
 </template>
 
 <script>
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import TablePage from './table';
 import ShowPage from './show';
 import FormPage from './form';
@@ -143,6 +144,15 @@ export default class AdminSourcePage extends Vue {
   state = {}
   componentDataInited = false;
   ShowPage = ShowPage
+  fetching = false;
+
+  @Watch('$route.query')
+  onQueryChange() {
+    const routerViewFullPathKey = _.get(this, '$vadminConfig.layout.routerViewFullPathKey');
+    if (!routerViewFullPathKey) {
+      this.fetchData();
+    }
+  }
 
   get CustomShowPage() {
     if (!_.isFunction(this.customShowPage)) {
@@ -290,6 +300,7 @@ export default class AdminSourcePage extends Vue {
   }
 
   async fetchData() {
+    this.fetching = true;
     try {
       if (_.isFunction(this.onFetchData)) {
         const state = await this.onFetchData({ resource: this.resource, type: this.type, namespace: this.namespace });
@@ -316,6 +327,7 @@ export default class AdminSourcePage extends Vue {
         this.$set(this.state, 'data', this.form);
       }
     } finally {
+      this.fetching = false;
       // 有时候会根据数据动态调整column，会导致加载前和加载后table等显示出问题
       // 比如数据没加载完时先渲染了空table，加载完多了一列，table header变高了，table没重新渲染，导致fixed的table列对不齐
       this.componentDataInited = true;

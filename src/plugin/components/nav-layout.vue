@@ -95,7 +95,11 @@
 
     get routerViewKey() {
       const { path, query } = this.$route;
-      return `${path}?${qs.stringify(query)}`;
+      const routerViewFullPathKey = _.get(this, '$vadminConfig.layout.routerViewFullPathKey');
+      if (routerViewFullPathKey) {
+        return `${path}?${qs.stringify(query)}`;
+      }
+      return path;
     }
   }
 </script>

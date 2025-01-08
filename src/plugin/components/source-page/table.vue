@@ -53,6 +53,7 @@
       <div class="box-table">
         <slot name="table" :value="value">
           <Table
+            v-loading="fetching"
             v-if="renderTable"
             v-bind="tableProps"
             v-on="tableEvents"
@@ -121,6 +122,7 @@ export default class AdminSourcePageTable extends Vue {
   @Prop(String) filterColumnSettingKey;
   /** Index 页面执行筛选时, 路由栈提交的方式: push 或 replace */
   @Prop({ type: String, default: 'replace' }) indexExecFilterRouterType;
+  @Prop(Boolean) fetching;
 
   filterForm = {};
   defaultSort = {};

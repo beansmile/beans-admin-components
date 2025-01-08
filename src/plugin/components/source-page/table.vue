@@ -265,6 +265,7 @@ export default class AdminSourcePageTable extends Vue {
   }
 
   execResetFilter(resets = []) {
+    this.filterForm = _.omit(this.filterForm, resets);
     const query = _.omit({ ...this.$route.query, page: 1 }, resets);
     this.$router[this.indexExecFilterRouterType]({ query, hash: this.$route.hash });
   }

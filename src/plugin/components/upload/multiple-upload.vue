@@ -88,12 +88,11 @@ import { Vue, Component, Prop, Model, Emit } from 'vue-property-decorator';
 import AdminTable from '../table';
 import FormSelect from '../form/select';
 import AdminForm from '../form';
-import { checkFileSize, uploadFile } from '../../utils';
+import { checkFileSize, uploadFile, handlePasteFiles } from '../../utils';
 import _ from 'lodash';
 import ImageCropperAction from './image-cropper-action';
 import { screenService } from '../../services';
 import DropBox from '../dropbox.vue';
-import { handlePasteFiles } from '../../utils';
 
 @Component({
   components: {

@@ -52,7 +52,7 @@ export default class AdminFilter extends Vue {
         })
       }
     }
-    return this.columns; 
+    return this.columns;
   }
 
   created() {

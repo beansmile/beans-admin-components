@@ -79,9 +79,8 @@
 import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
 import MultipleUpload from './multiple-upload';
 import ImageCropper from './image-cropper';
-import { uploadFile, isImageFile, imageFileNeedCrop, checkFileSize, getImageInfo } from '../../utils';
+import { uploadFile, isImageFile, imageFileNeedCrop, checkFileSize, getImageInfo, handlePasteFiles } from '../../utils';
 import DropBox from '../dropbox.vue';
-import { handlePasteFiles } from '../../utils';
 
 @Component({
   components: {

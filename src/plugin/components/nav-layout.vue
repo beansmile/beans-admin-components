@@ -73,6 +73,7 @@
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import NavMenu from './nav-menu';
   import qs from 'qs';
+  import _ from 'lodash';
 
   @Component({
     components: {

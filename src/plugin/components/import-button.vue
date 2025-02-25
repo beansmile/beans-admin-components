@@ -41,6 +41,7 @@
     @Prop({ type: Boolean, default: false }) useGlobalUpload; // 使用全局的upload
     @Prop({ type: Object }) globalUploadProps;
     @Prop({ type: [String, Array] }) can;
+    @Prop(Function) afterSuccessHandler;
 
     importing = false;
 
@@ -101,7 +102,11 @@
         } else {
           await this.upload(file);
         }
-        this.$message.success(this.$t('bean.importSuccess'));
+        if (_.isFunction(this.afterSuccessHandler)) {
+          this.afterSuccessHandler();
+        } else {
+          this.$message.success(this.$t('bean.importSuccess'));
+        }
       } catch (e) {
         const msg = e.message || this.$t('bean.importFail');
         this.$message.error(msg);
